@@ -7,10 +7,10 @@ const locationsRouter = express.Router();
 // Define the validation middleware for POST requests
 const validateWordData = [
   check("english")
-    .isAlpha()
+    .matches(/^[a-zA-Z]+$/, "i")
     .withMessage("Invalid value for English, must contain only letters"),
   check("finnish")
-    .isAlpha()
+    .matches(/^[a-zA-ZäåöÄÅÖ]+$/)
     .withMessage("Invalid value for Finnish, must contain only letters"),
 ];
 

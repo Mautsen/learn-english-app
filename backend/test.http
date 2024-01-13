@@ -15,7 +15,7 @@ delete http://localhost:8080/api/words/5
 post http://localhost:8080/api/words/
 content-type: application/json
 
-{ "english": "turtle", "finnish": "kilpikonna" }
+{ "english": "cow", "finnish": "lehmä" }
 
 
 

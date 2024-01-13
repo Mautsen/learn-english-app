@@ -9,7 +9,7 @@ const locSchema = {
     },
     finnish: {
       type: "string",
-      pattern: "^[a-zA-Z]+$",
+      pattern: "^[a-zA-ZäåöÄÅÖ]+$",
     },
   },
   required: ["english", "finnish"],
