@@ -1,0 +1,37 @@
+
+get http://localhost:8080/
+
+###
+get http://localhost:8080/api/words
+
+###
+get http://localhost:8080/api/words/3
+
+
+###
+delete http://localhost:8080/api/words/5
+
+###
+post http://localhost:8080/api/words/
+content-type: application/json
+
+{ "english": "turtle", "finnish": "kilpikonna" }
+
+
+
+# ###
+# put http://localhost:8080/api/locations/2
+# Content-Type: application/json
+
+# {
+#   "latitude": 61,
+#   "longitude": 61
+# }
+
+# ###
+# patch http://localhost:8080/api/locations/1
+# Content-Type: application/json
+
+# {
+#   "latitude": 65
+# }
