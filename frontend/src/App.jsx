@@ -12,6 +12,7 @@ const App = () => {
   const [userInput, setUserInput] = useState("");
   const [score, setScore] = useState(0);
   const [isGameFinished, setIsGameFinished] = useState(false);
+  const [isEnglishToFinnish, setIsEnglishtoFinnish] = useState(true);
 
   useEffect(() => {
     // Fetch words from an external API
@@ -37,11 +38,19 @@ const App = () => {
     }
 
     // Check users answer
-    if (
-      userInput.toLowerCase() === words[currentWordIndex].english.toLowerCase()
-    ) {
+    const isAnswerCorrect =
+      (!isEnglishToFinnish &&
+        userInput.toLowerCase() ===
+          words[currentWordIndex].finnish.toLowerCase()) ||
+      (isEnglishToFinnish &&
+        userInput.toLowerCase() ===
+          words[currentWordIndex].english.toLowerCase());
+
+    console.log("isAnswerCorrect:", isAnswerCorrect);
+
+    if (isAnswerCorrect) {
       // If correct, add points
-      setScore(score + 1);
+      setScore((prevScore) => prevScore + 1);
     }
 
     // Move to the next word
@@ -62,12 +71,29 @@ const App = () => {
     setUserInput("");
   };
 
+  const handleLanguageToggle = () => {
+    // Toggle between English to Finnish and Finnish to English
+    setIsEnglishtoFinnish((prevValue) => !prevValue);
+
+    // Restart the game when changing the language
+    handleRestartGame();
+  };
+
   if (words.length === 0) {
     return <p>Loading...</p>;
   }
 
   return (
     <div>
+      <div style={{ textAlign: "right", margin: "10px" }}>
+        <Button
+          variant="outlined"
+          onClick={handleLanguageToggle}
+          style={{ backgroundColor: "white" }}
+        >
+          {isEnglishToFinnish ? "English to Finnish" : "Finnish to English"}
+        </Button>
+      </div>
       <Card
         variant="soft"
         style={{
@@ -86,7 +112,9 @@ const App = () => {
           <Typography variant="h3" component="div" style={{ marginBottom: 20 }}>
             {isGameFinished
               ? "Kaikki sanat käyty läpi!"
-              : words[currentWordIndex].finnish}
+              : isEnglishToFinnish
+              ? words[currentWordIndex].finnish
+              : words[currentWordIndex].english}
           </Typography>
           <TextField
             type="text"
