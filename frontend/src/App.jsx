@@ -46,8 +46,6 @@ const App = () => {
         userInput.toLowerCase() ===
           words[currentWordIndex].english.toLowerCase());
 
-    console.log("isAnswerCorrect:", isAnswerCorrect);
-
     if (isAnswerCorrect) {
       // If correct, add points
       setScore((prevScore) => prevScore + 1);
@@ -83,6 +81,21 @@ const App = () => {
     return <p>Loading...</p>;
   }
 
+  const translation = {
+    translateWord: isEnglishToFinnish
+      ? "Finnish to English"
+      : "English to Finnish",
+    translatePrompt: isEnglishToFinnish
+      ? "Käännä sana:"
+      : "Translate the word:",
+    allWordsPlayed: isEnglishToFinnish
+      ? "Kaikki sanat on pelattu!"
+      : "All words have been played!",
+    answerButton: isEnglishToFinnish ? "Vastaa" : "Answer",
+    restartButton: isEnglishToFinnish ? "Aloita alusta" : "Restart",
+    points: isEnglishToFinnish ? "Pisteet" : "Points",
+  };
+
   return (
     <div>
       <div style={{ textAlign: "right", margin: "10px" }}>
@@ -91,7 +104,7 @@ const App = () => {
           onClick={handleLanguageToggle}
           style={{ backgroundColor: "white" }}
         >
-          {isEnglishToFinnish ? "English to Finnish" : "Finnish to English"}
+          {translation.translateWord}
         </Button>
       </div>
       <Card
@@ -107,11 +120,11 @@ const App = () => {
       >
         <CardContent>
           <Typography variant="h4" component="div" style={{ marginBottom: 20 }}>
-            Käännä sana:
+            {translation.translatePrompt}
           </Typography>
           <Typography variant="h3" component="div" style={{ marginBottom: 20 }}>
             {isGameFinished
-              ? "Kaikki sanat käyty läpi!"
+              ? translation.allWordsPlayed
               : isEnglishToFinnish
               ? words[currentWordIndex].finnish
               : words[currentWordIndex].english}
@@ -128,7 +141,7 @@ const App = () => {
               onClick={handleAnswerSubmit}
               style={{ marginTop: 20 }}
             >
-              Vastaa
+              {translation.answerButton}
             </Button>
           ) : (
             <Button
@@ -136,11 +149,11 @@ const App = () => {
               onClick={handleRestartGame}
               style={{ marginTop: 20 }}
             >
-              Aloita alusta
+              {translation.restartButton}
             </Button>
           )}
           <Typography variant="body2" component="div" style={{ marginTop: 20 }}>
-            Pisteet: {score}
+            {`${translation.points}: ${score}`}
           </Typography>
         </CardContent>
       </Card>
