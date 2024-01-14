@@ -83,8 +83,8 @@ const App = () => {
 
   const translation = {
     translateWord: isEnglishToFinnish
-      ? "Finnish to English"
-      : "English to Finnish",
+      ? "English to Finnish"
+      : "Finnish to English",
     translatePrompt: isEnglishToFinnish
       ? "Käännä sana:"
       : "Translate the word:",
