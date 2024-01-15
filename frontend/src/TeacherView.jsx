@@ -12,7 +12,7 @@ const TeacherView = () => {
 
   const fetchWords = () => {
     // Make HTTP GET request to the backend to fetch words
-    fetch("http://localhost:8080/api/words")
+    fetch(`${import.meta.env.VITE_API_URL}/api/words`)
       .then((response) => response.json())
       .then((data) => setWords(data))
       .catch((error) => console.error("Error fetching words:", error));
@@ -20,7 +20,7 @@ const TeacherView = () => {
 
   const addWord = () => {
     // Make HTTP POST request to the backend to add a new word
-    fetch("http://localhost:8080/api/words", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/words`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -48,7 +48,7 @@ const TeacherView = () => {
 
   const saveUpdatedWord = () => {
     // Tee HTTP PUT -pyyntö päivittääksesi sanan tiedot
-    fetch(`http://localhost:8080/api/words/${editWord.id}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/api/words${editWord.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
