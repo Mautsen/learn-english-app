@@ -2,7 +2,7 @@
 const express = require("express");
 const database = require("../crudrepository");
 const { check, validationResult } = require("express-validator"); // Use this to validate POST requests. Use "npm install express-validator" to use it. I chose this one because the errors are very clear and shows where exactly did it happen. You could also use schema (like last week).
-const locationsRouter = express.Router();
+const wordsRouter = express.Router();
 
 // Define the validation middleware for POST requests
 const validateWordData = [
@@ -14,12 +14,12 @@ const validateWordData = [
     .withMessage("Invalid value for Finnish, must contain only letters"),
 ];
 
-locationsRouter.get("/", async (req, res) => {
+wordsRouter.get("/", async (req, res) => {
   const words = await database.findAll();
   res.json(words);
 });
 
-locationsRouter.get("/:myId([0-9]+)", async (req, res) => {
+wordsRouter.get("/:myId([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.myId);
     const word = await database.findById(id);
@@ -34,7 +34,7 @@ locationsRouter.get("/:myId([0-9]+)", async (req, res) => {
   }
 });
 
-locationsRouter.delete("/:myId([0-9]+)", async (req, res) => {
+wordsRouter.delete("/:myId([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.myId);
     const deletedWord = await database.deleteById(id);
@@ -49,7 +49,7 @@ locationsRouter.delete("/:myId([0-9]+)", async (req, res) => {
   }
 });
 
-locationsRouter.post("/", validateWordData, async (req, res) => {
+wordsRouter.post("/", validateWordData, async (req, res) => {
   try {
     // Check for validation errors
     const errors = validationResult(req);
@@ -70,57 +70,54 @@ locationsRouter.post("/", validateWordData, async (req, res) => {
   }
 });
 
-// locationsRouter.put(
-//   "/:myId([0-9]+)",
-//   validateLocationData,
-//   async (req, res) => {
-//     try {
-//       // Check for validation errors
-//       const validationErrors = validationResult(req);
+// Update word
+wordsRouter.put("/:myId([0-9]+)", validateWordData, async (req, res) => {
+  try {
+    // Check for validation errors
+    const validationErrors = validationResult(req);
 
-//       if (!validationErrors.isEmpty()) {
-//         return res.status(400).json({ errors: validationErrors.array() });
-//       }
+    if (!validationErrors.isEmpty()) {
+      return res.status(400).json({ errors: validationErrors.array() });
+    }
 
-//       const id = parseInt(req.params.myId);
-//       const { latitude, longitude } = req.body;
+    const id = parseInt(req.params.myId);
+    const { english, finnish } = req.body;
 
-//       const location = await database.updateLocation(id, {
-//         latitude,
-//         longitude,
-//       });
+    const word = await database.updateById(id, {
+      english,
+      finnish,
+    });
 
-//       if (!location) {
-//         console.log(location);
-//         res.status(404).send("Can't find location");
-//       } else {
-//         res.status(200).json(location);
-//       }
-//     } catch (error) {
-//       res.status(500).send("Internal Server Error");
-//     }
-//   }
-// );
+    if (!word) {
+      console.log(word);
+      res.status(404).send("Can't find word");
+    } else {
+      res.status(200).json(word);
+    }
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 // // Use PATCH to partially update an existing resource
-// locationsRouter.patch("/:myId([0-9]+)", async (req, res) => {
+// wordsRouter.patch("/:myId([0-9]+)", async (req, res) => {
 //   try {
 //     const id = parseInt(req.params.myId);
 //     const { latitude, longitude } = req.body;
 
-//     const location = await database.partiallyUpdateLocation(id, {
+//     const word = await database.partiallyUpdateword(id, {
 //       latitude,
 //       longitude,
 //     });
 
-//     if (!location) {
-//       res.status(404).send("Can't find location");
+//     if (!word) {
+//       res.status(404).send("Can't find word");
 //     } else {
-//       res.status(200).json(location);
+//       res.status(200).json(word);
 //     }
 //   } catch (error) {
 //     res.status(500).send("Internal Server Error");
 //   }
 // });
 
-module.exports = locationsRouter;
+module.exports = wordsRouter;

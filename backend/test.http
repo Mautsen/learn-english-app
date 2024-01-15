@@ -15,18 +15,16 @@ delete http://localhost:8080/api/words/5
 post http://localhost:8080/api/words/
 content-type: application/json
 
-{ "english": "cow", "finnish": "lehmä" }
+{ "english": "owl", "finnish": "pöllö" }
 
+###
+put http://localhost:8080/api/words/2
+Content-Type: application/json
 
-
-# ###
-# put http://localhost:8080/api/locations/2
-# Content-Type: application/json
-
-# {
-#   "latitude": 61,
-#   "longitude": 61
-# }
+{
+    "english": "dogg",
+    "finnish": "koira"
+}
 
 # ###
 # patch http://localhost:8080/api/locations/1

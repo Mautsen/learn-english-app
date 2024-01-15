@@ -25,39 +25,6 @@ const server = app
     process.exit(1);
   });
 
-// app.get("/api/locations", (req, res) => {
-//   config.query(
-//     "SELECT CONNECTION_ID() AS ConnID, locations.* FROM locations",
-//     (error, results) => {
-//       if (error) {
-//         throw error;
-//       }
-//       console.log("ConnectionID: ", results[0]["ConnID"]);
-//       res.json(results);
-//     }
-//   );
-// });
-
-// let server = undefined;
-// config.connect((err) => {
-//   // mysql connection
-//   if (err) {
-//     console.error("Error connecting to MySQL:", err);
-//     process.exit(1);
-//   } else {
-//     console.log("MySQL connection successful.");
-//     // Start the server and listen on the specified port
-//     server = app
-//       .listen(port, () => {
-//         console.log(`SERVER: listening on port ${port}`);
-//       })
-//       .on("error", (err) => {
-//         console.error("Error starting server:", err);
-//         process.exit(1);
-//       });
-//   }
-// });
-
 const gracefulShutdown = () => {
   console.log("SERVER: Starting graceful shutdown...");
   // Close the server

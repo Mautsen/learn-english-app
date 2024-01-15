@@ -105,6 +105,20 @@ const connectionFunctions = {
       });
     });
   },
+  updateById: (id, updatedWord) => {
+    return new Promise((resolve, reject) => {
+      const query = "UPDATE words SET english=?, finnish=? WHERE id=?";
+      const values = [updatedWord.english, updatedWord.finnish, id];
+
+      config.query(query, values, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(updatedWord);
+        }
+      });
+    });
+  },
 };
 
 module.exports = connectionFunctions;
