@@ -7,7 +7,8 @@
     "start": "node backend/express.js",
     "build:frontend": "cd frontend && npm run build",
     "dev:frontend": "cd frontend && npm run dev",
-    "dev:backend": "nodemon backend/express.js"
+    "dev:backend": "nodemon backend/express.js",
+    "build": "cd frontend && npm run build && cd ../backend && npm install"
   },
   "keywords": [],
   "author": "",
@@ -28,13 +29,17 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
+    "i18next": "^23.7.16",
     "jsonschema": "^1.4.1",
     "leaflet": "^1.9.4",
     "mysql": "^2.18.1",
     "nodemon": "^3.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^14.0.0",
     "react-leaflet": "^4.2.1",
-    "readline-sync": "^1.4.10"
+    "react-router-dom": "^6.21.2",
+    "readline-sync": "^1.4.10",
+    "styled-components": "^6.1.8"
   }
 }
