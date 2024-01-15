@@ -20,7 +20,7 @@ const AppView = () => {
 
   useEffect(() => {
     // Fetch words from an external API
-    fetch("http://localhost:8080/api/words")
+    fetch(`${import.meta.env.VITE_API_URL}`)
       .then((response) => response.json())
       .then((data) => setWords(shuffleArray(data))) // Shuffle the words
       .catch((error) => console.error("Error fetching words:", error));
