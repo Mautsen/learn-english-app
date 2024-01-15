@@ -3,12 +3,23 @@ body {
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-
   font-family: sans-serif;
   background-image: url("./space.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.card {
+  text-align: center;
+  font-family: sans-serif;
+  background: linear-gradient(
+    to bottom right,
+    #ff7e5f,
+    #feb47b
+  ); /* Gradient colors */
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 footer {

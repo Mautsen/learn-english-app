@@ -112,14 +112,13 @@ const AppView = () => {
         </Button>
       </div>
       <Card
+        className="card"
         variant="soft"
         style={{
           width: 300,
           margin: "auto",
           marginTop: 50,
           borderRadius: 16,
-          backgroundColor: "#b8dbf0",
-          boxShadow: "0px 8px 18px rgba(0, 0, 0, 0.5)",
         }}
       >
         <CardContent>
