@@ -3,10 +3,16 @@ body {
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-  background-color: rgb(241, 189, 212);
+  min-height: 100vh;
+
   font-family: sans-serif;
   background-image: url("./space.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+footer {
+  text-align: center;
+  padding: 15px;
 }

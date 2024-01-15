@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import "./App.css";
 import TeacherView from "./TeacherView";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 const AppView = () => {
   const [words, setWords] = useState([]);
@@ -160,6 +161,7 @@ const AppView = () => {
           </Typography>
         </CardContent>
       </Card>
+      <Footer />
     </div>
   );
 };

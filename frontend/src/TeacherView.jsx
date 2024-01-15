@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Footer from "./Footer";
 
 function TeacherView() {
   const [newWord, setNewWord] = useState({ english: "", finnish: "" });
@@ -70,6 +71,7 @@ function TeacherView() {
           </ul>
         </div>
       </>
+      <Footer />
     </>
   );
 }
