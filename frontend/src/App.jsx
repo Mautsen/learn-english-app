@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import "./App.css";
+import TeacherView from "./TeacherView";
+import Navbar from "./Navbar";
 
-const App = () => {
+const AppView = () => {
   const [words, setWords] = useState([]);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [userInput, setUserInput] = useState("");
@@ -160,5 +163,17 @@ const App = () => {
     </div>
   );
 };
-
+function App() {
+  return (
+    <Router>
+      <div>
+        <Navbar />
+        <Routes>
+          <Route path="/teacher" element={<TeacherView />} />
+          <Route path="/" element={<AppView />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+}
 export default App;
