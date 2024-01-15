@@ -3,7 +3,6 @@ body {
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-  min-height: 100vh;
 
   font-family: sans-serif;
   background-image: url("./space.jpg");
@@ -15,4 +14,10 @@ body {
 footer {
   text-align: center;
   padding: 15px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
