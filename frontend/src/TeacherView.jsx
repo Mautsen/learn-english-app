@@ -67,6 +67,16 @@ const TeacherView = () => {
       .catch((error) => console.error("Error updating word:", error));
   };
 
+  const deleteWord = (id) => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/words/${id}`, {
+      method: "DELETE",
+    })
+      .then(() => {
+        fetchWords();
+      })
+      .catch((error) => console.error("Error deleting word:", error));
+  };
+
   useEffect(() => {
     // Fetch words when the component mounts
     fetchWords();
@@ -125,6 +135,7 @@ const TeacherView = () => {
                 ) : (
                   <button onClick={() => updateWord(word.id)}>Update</button>
                 )}
+                <button onClick={() => deleteWord(word.id)}>Delete</button>
               </li>
             ))}
           </ul>
