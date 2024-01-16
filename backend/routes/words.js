@@ -99,25 +99,4 @@ wordsRouter.put("/:myId([0-9]+)", validateWordData, async (req, res) => {
   }
 });
 
-// // Use PATCH to partially update an existing resource
-// wordsRouter.patch("/:myId([0-9]+)", async (req, res) => {
-//   try {
-//     const id = parseInt(req.params.myId);
-//     const { latitude, longitude } = req.body;
-
-//     const word = await database.partiallyUpdateword(id, {
-//       latitude,
-//       longitude,
-//     });
-
-//     if (!word) {
-//       res.status(404).send("Can't find word");
-//     } else {
-//       res.status(200).json(word);
-//     }
-//   } catch (error) {
-//     res.status(500).send("Internal Server Error");
-//   }
-// });
-
 module.exports = wordsRouter;
