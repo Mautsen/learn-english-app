@@ -149,7 +149,7 @@ const TeacherView = () => {
           value={newWord.finnish}
           onChange={(e) => setNewWord({ ...newWord, finnish: e.target.value })}
         />
-        <button onClick={addWord}>Add Word</button>
+        <button onClick={addWord}>Add</button>
       </div>
       <div>
         {/* List of words with options to edit and delete */}
