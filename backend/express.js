@@ -15,7 +15,7 @@ const express = require("express");
  * @const
  * @namespace
  */
-const locationsRouter = require("./routes/words");
+const wordRouter = require("./routes/words");
 
 /**
  * Import the configuration object for the database connection.
@@ -69,10 +69,10 @@ app.use(express.static("./frontend/dist"));
  * @function
  * @name useWordRoutes
  * @param {string} path - The base path for the word routes.
- * @param {Object} locationsRouter - The router object for word routes.
+ * @param {Object} wordRouter - The router object for word routes.
  * @returns {void}
  */
-app.use("/api/words", locationsRouter);
+app.use("/api/words", wordRouter);
 
 /**
  * Create an HTTP server and listen on the specified port.
