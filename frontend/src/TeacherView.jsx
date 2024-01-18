@@ -156,7 +156,7 @@ const TeacherView = () => {
         <h2>Words</h2>
         <ul>
           {words.map((word) => (
-            <li key={word.id}>
+            <li key={word.id} style={{ fontWeight: "bold" }}>
               {word.english} - {word.finnish}
               {/* Edit mode when editing a word */}
               {editWord.id === word.id ? (
