@@ -26,7 +26,7 @@ Documentation:
 - JSDoc <br>
 
 ## Installation
-Make sure to use MySQL-database. Add the configuration to `backend/database/config.js` -file or create .env to the root. <br>
+Copy the repository and make sure to use your own MySQL-database. Add the configuration to `backend/database/config.js` -file or create .env to the root. <br>
 
 Build frontend: `cd frontend && npm install && npm run build`
 
