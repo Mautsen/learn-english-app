@@ -28,9 +28,9 @@ Documentation:
 ## Installation
 Copy the repository and make sure to use your own MySQL-database. Add the configuration to `backend/database/config.js` -file or create .env to the root. <br>
 
-Build frontend: `cd frontend && npm install && npm run build`
+Build frontend: `npm run build`
 
-Start backend: `cd backend && npm install && npm start`
+Start backend: `npm run start`
 
 ## Usage
 https://learn-english-wiat.onrender.com/ <br>
