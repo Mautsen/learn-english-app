@@ -1,10 +1,37 @@
-// Import the express module
+/**
+ * Express module for handling word-related routes.
+ * @const
+ * @namespace
+ */
 const express = require("express");
+
+/**
+ * Database module for CRUD operations on words.
+ * @const
+ * @namespace
+ */
 const database = require("../crudrepository");
-const { check, validationResult } = require("express-validator"); // Use this to validate POST requests. Use "npm install express-validator" to use it. I chose this one because the errors are very clear and shows where exactly did it happen. You could also use schema (like last week).
+
+/**
+ * Express-validator module for request data validation.
+ * @const
+ * @namespace
+ */
+const { check, validationResult } = require("express-validator");
+
+/**
+ * Router for handling word-related routes.
+ * @const
+ * @namespace
+ */
 const wordsRouter = express.Router();
 
-// Define the validation middleware for POST requests
+/**
+ * Middleware for validating data in POST requests.
+ * @constant
+ * @type {Array}
+ * @name validateWordData
+ */
 const validateWordData = [
   check("english")
     .matches(/^[a-zA-Z]+$/, "i")
@@ -14,11 +41,21 @@ const validateWordData = [
     .withMessage("Invalid value for Finnish, must contain only letters"),
 ];
 
+/**
+ * GET endpoint to retrieve all words.
+ * @function
+ * @name getAllWords
+ */
 wordsRouter.get("/", async (req, res) => {
   const words = await database.findAll();
   res.json(words);
 });
 
+/**
+ * GET endpoint to retrieve a word by ID.
+ * @function
+ * @name getWordById
+ */
 wordsRouter.get("/:myId([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.myId);
@@ -34,6 +71,11 @@ wordsRouter.get("/:myId([0-9]+)", async (req, res) => {
   }
 });
 
+/**
+ * DELETE endpoint to delete a word by ID.
+ * @function
+ * @name deleteWordById
+ */
 wordsRouter.delete("/:myId([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.myId);
@@ -49,6 +91,11 @@ wordsRouter.delete("/:myId([0-9]+)", async (req, res) => {
   }
 });
 
+/**
+ * POST endpoint to add a new word.
+ * @function
+ * @name addNewWord
+ */
 wordsRouter.post("/", validateWordData, async (req, res) => {
   try {
     // Check for validation errors
@@ -70,7 +117,11 @@ wordsRouter.post("/", validateWordData, async (req, res) => {
   }
 });
 
-// Update word
+/**
+ * PUT endpoint to update a word by ID.
+ * @function
+ * @name updateWordById
+ */
 wordsRouter.put("/:myId([0-9]+)", validateWordData, async (req, res) => {
   try {
     // Check for validation errors
@@ -99,4 +150,8 @@ wordsRouter.put("/:myId([0-9]+)", validateWordData, async (req, res) => {
   }
 });
 
+/**
+ * Exports the wordsRouter for use in other modules.
+ * @module
+ */
 module.exports = wordsRouter;

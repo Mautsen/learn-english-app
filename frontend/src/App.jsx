@@ -10,6 +10,12 @@ import TeacherView from "./TeacherView";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
+/**
+ * Main application component for the English learning game.
+ * Handles user interaction, game logic, and rendering of the game view.
+ * @function AppView
+ * @returns {JSX.Element} - React component.
+ */
 const AppView = () => {
   const [words, setWords] = useState([]);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -22,12 +28,17 @@ const AppView = () => {
     // Fetch words from an external API
     fetch(`${import.meta.env.VITE_API_URL}/api/words`)
       .then((response) => response.json())
-      .then((data) => setWords(shuffleArray(data))) // Shuffle the words
+      .then((data) => setWords(shuffleArray(data)))
       .catch((error) => console.error("Error fetching words:", error));
   }, [isGameFinished]);
 
+  /**
+   * Shuffle an array in a random order.
+   * @function shuffleArray
+   * @param {Array} array - The array to be shuffled.
+   * @returns {Array} - Shuffled array.
+   */
   const shuffleArray = (array) => {
-    // Shuffle the words in a random order
     return array.sort(() => Math.random() - 0.5);
   };
 
@@ -35,13 +46,16 @@ const AppView = () => {
     setUserInput(event.target.value);
   };
 
+  /**
+   * Submit the user's answer and handle the game logic.
+   * @function handleAnswerSubmit
+   * @returns {void}
+   */
   const handleAnswerSubmit = () => {
     if (isGameFinished) {
-      // Show a message when all words have been played
-      return;
+      return; // Show a message when all words have been played
     }
 
-    // Check users answer
     const isAnswerCorrect =
       (!isEnglishToFinnish &&
         userInput.toLowerCase() ===
@@ -51,21 +65,23 @@ const AppView = () => {
           words[currentWordIndex].english.toLowerCase());
 
     if (isAnswerCorrect) {
-      // If correct, add points
       setScore((prevScore) => prevScore + 1);
     }
 
-    // Move to the next word
     setCurrentWordIndex((prevIndex) => prevIndex + 1);
 
     if (currentWordIndex + 1 === words.length) {
-      // All words have been played
       setIsGameFinished(true);
     }
 
     setUserInput("");
   };
 
+  /**
+   * Restart the game by resetting state variables.
+   * @function handleRestartGame
+   * @returns {void}
+   */
   const handleRestartGame = () => {
     setIsGameFinished(false);
     setCurrentWordIndex(0);
@@ -73,11 +89,14 @@ const AppView = () => {
     setUserInput("");
   };
 
+  /**
+   * Toggle between English to Finnish and Finnish to English.
+   * Restart the game when changing the language.
+   * @function handleLanguageToggle
+   * @returns {void}
+   */
   const handleLanguageToggle = () => {
-    // Toggle between English to Finnish and Finnish to English
     setIsEnglishtoFinnish((prevValue) => !prevValue);
-
-    // Restart the game when changing the language
     handleRestartGame();
   };
 
@@ -164,6 +183,7 @@ const AppView = () => {
     </div>
   );
 };
+
 function App() {
   return (
     <Router>

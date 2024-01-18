@@ -1,3 +1,22 @@
+/**
+ * Footer component displays a simple footer with attribution to the image source.
+ *
+ * @component
+ * @example
+ * // Example usage within another component or file:
+ * import Footer from './Footer';
+ *
+ * const MyComponent = () => {
+ *   return (
+ *     <div>
+ *       { Your main content }
+ *       <Footer />
+ *     </div>
+ *   );
+ * };
+ *
+ * @returns {JSX.Element} Rendered Footer component.
+ */
 const Footer = () => {
   return (
     <footer>

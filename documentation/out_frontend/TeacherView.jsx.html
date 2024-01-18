@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: TeacherView.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: TeacherView.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useState, useEffect } from "react";
+import Footer from "./Footer";
+
+/**
+ * TeacherView component for managing and interacting with words in the React application.
+ *
+ * The TeacherView component allows teachers to add, edit, and delete words. It communicates
+ * with the backend API to perform CRUD operations on the words.
+ *
+ * @component
+ * @name TeacherView
+ * @returns {JSX.Element} - Returns the TeacherView component with word management functionality.
+ */
+const TeacherView = () => {
+  // State variables for managing new words, edited words, and the list of words
+  const [newWord, setNewWord] = useState({ english: "", finnish: "" });
+  const [editWord, setEditWord] = useState({
+    id: null,
+    english: "",
+    finnish: "",
+  });
+  const [words, setWords] = useState([]);
+
+  /**
+   * Function to fetch words from the backend API.
+   *
+   * @kind function
+   * @name fetchWords
+   * @returns {void}
+   */
+  const fetchWords = () => {
+    // Make HTTP GET request to the backend to fetch words
+    fetch(`${import.meta.env.VITE_API_URL}/api/words`)
+      .then((response) => response.json())
+      .then((data) => setWords(data))
+      .catch((error) => console.error("Error fetching words:", error));
+  };
+
+  /**
+   * Function to add a new word to the backend.
+   *
+   * @kind function
+   * @name addWord
+   * @returns {void}
+   */
+  const addWord = () => {
+    // Make HTTP POST request to the backend to add a new word
+    fetch(`${import.meta.env.VITE_API_URL}/api/words`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newWord),
+    })
+      .then(() => {
+        // Refresh words after the update
+        fetchWords();
+        // Clear the form
+        setNewWord({ english: "", finnish: "" });
+      })
+      .catch((error) => console.error("Error adding word:", error));
+  };
+
+  /**
+   * Function to set the selected word for editing.
+   *
+   * @kind function
+   * @name updateWord
+   * @param {number} id - The ID of the word to be edited.
+   * @returns {void}
+   */
+  const updateWord = (id) => {
+    // Set the selected word to a state
+    const selectedWord = words.find((word) => word.id === id);
+    setEditWord({
+      id,
+      english: selectedWord.english,
+      finnish: selectedWord.finnish,
+    });
+  };
+
+  /**
+   * Function to save the updated word to the backend.
+   *
+   * @kind function
+   * @name saveUpdatedWord
+   * @returns {void}
+   */
+  const saveUpdatedWord = () => {
+    // Make HTTP PUT request
+    fetch(`${import.meta.env.VITE_API_URL}/api/words/${editWord.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        english: editWord.english,
+        finnish: editWord.finnish,
+      }),
+    })
+      .then(() => {
+        // Update the words shown
+        fetchWords();
+        // Empty the input fields
+        setEditWord({ id: null, english: "", finnish: "" });
+      })
+      .catch((error) => console.error("Error updating word:", error));
+  };
+
+  /**
+   * Function to delete a word from the backend.
+   *
+   * @kind function
+   * @name deleteWord
+   * @param {number} id - The ID of the word to be deleted.
+   * @returns {void}
+   */
+  const deleteWord = (id) => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/words/${id}`, {
+      method: "DELETE",
+    })
+      .then(() => {
+        fetchWords();
+      })
+      .catch((error) => console.error("Error deleting word:", error));
+  };
+
+  // Fetch words when the component mounts
+  useEffect(() => {
+    fetchWords();
+  }, []);
+
+  return (
+    &lt;>
+      {/* TeacherView content */}
+      &lt;h1>Teacher&lt;/h1>
+      &lt;div>
+        {/* Form for adding a new word */}
+        &lt;h2>Add Word&lt;/h2>
+        &lt;input
+          type="text"
+          placeholder="English"
+          value={newWord.english}
+          onChange={(e) => setNewWord({ ...newWord, english: e.target.value })}
+        />
+        &lt;input
+          type="text"
+          placeholder="Finnish"
+          value={newWord.finnish}
+          onChange={(e) => setNewWord({ ...newWord, finnish: e.target.value })}
+        />
+        &lt;button onClick={addWord}>Add Word&lt;/button>
+      &lt;/div>
+      &lt;div>
+        {/* List of words with options to edit and delete */}
+        &lt;h2>Words&lt;/h2>
+        &lt;ul>
+          {words.map((word) => (
+            &lt;li key={word.id}>
+              {word.english} - {word.finnish}
+              {/* Edit mode when editing a word */}
+              {editWord.id === word.id ? (
+                &lt;>
+                  &lt;input
+                    type="text"
+                    placeholder="English"
+                    value={editWord.english}
+                    onChange={(e) =>
+                      setEditWord({ ...editWord, english: e.target.value })
+                    }
+                  />
+                  &lt;input
+                    type="text"
+                    placeholder="Finnish"
+                    value={editWord.finnish}
+                    onChange={(e) =>
+                      setEditWord({ ...editWord, finnish: e.target.value })
+                    }
+                  />
+                  &lt;button onClick={saveUpdatedWord}>Save&lt;/button>
+                &lt;/>
+              ) : (
+                &lt;>
+                  {/* Button to enter edit mode */}
+                  &lt;button onClick={() => updateWord(word.id)}>Update&lt;/button>
+                &lt;/>
+              )}
+              {/* Button to delete the word */}
+              &lt;button onClick={() => deleteWord(word.id)}>Delete&lt;/button>
+            &lt;/li>
+          ))}
+        &lt;/ul>
+      &lt;/div>
+      {/* Footer component at the bottom of the page */}
+      &lt;Footer />
+    &lt;/>
+  );
+};
+
+export default TeacherView;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AppView">AppView</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#RenderApp">RenderApp</a></li><li><a href="global.html#StrictMode">StrictMode</a></li><li><a href="global.html#TeacherView">TeacherView</a></li><li><a href="global.html#addWord">addWord</a></li><li><a href="global.html#deleteWord">deleteWord</a></li><li><a href="global.html#fetchWords">fetchWords</a></li><li><a href="global.html#handleAnswerSubmit">handleAnswerSubmit</a></li><li><a href="global.html#handleLanguageToggle">handleLanguageToggle</a></li><li><a href="global.html#handleRestartGame">handleRestartGame</a></li><li><a href="global.html#saveUpdatedWord">saveUpdatedWord</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#updateWord">updateWord</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jan 18 2024 14:14:57 GMT+0200 (Itä-Euroopan normaaliaika)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

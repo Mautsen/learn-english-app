@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: routes/words.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: routes/words.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Express module for handling word-related routes.
+ * @const
+ * @namespace
+ */
+const express = require("express");
+
+/**
+ * Database module for CRUD operations on words.
+ * @const
+ * @namespace
+ */
+const database = require("../crudrepository");
+
+/**
+ * Express-validator module for request data validation.
+ * @const
+ * @namespace
+ */
+const { check, validationResult } = require("express-validator");
+
+/**
+ * Router for handling word-related routes.
+ * @const
+ * @namespace
+ */
+const wordsRouter = express.Router();
+
+/**
+ * Middleware for validating data in POST requests.
+ * @constant
+ * @type {Array}
+ * @name validateWordData
+ */
+const validateWordData = [
+  check("english")
+    .matches(/^[a-zA-Z]+$/, "i")
+    .withMessage("Invalid value for English, must contain only letters"),
+  check("finnish")
+    .matches(/^[a-zA-ZäåöÄÅÖ]+$/)
+    .withMessage("Invalid value for Finnish, must contain only letters"),
+];
+
+/**
+ * GET endpoint to retrieve all words.
+ * @function
+ * @name getAllWords
+ */
+wordsRouter.get("/", async (req, res) => {
+  const words = await database.findAll();
+  res.json(words);
+});
+
+/**
+ * GET endpoint to retrieve a word by ID.
+ * @function
+ * @name getWordById
+ */
+wordsRouter.get("/:myId([0-9]+)", async (req, res) => {
+  try {
+    const id = parseInt(req.params.myId);
+    const word = await database.findById(id);
+
+    if (!word) {
+      res.status(404).send("Can't find word");
+    } else {
+      res.status(200).json(word);
+    }
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+/**
+ * DELETE endpoint to delete a word by ID.
+ * @function
+ * @name deleteWordById
+ */
+wordsRouter.delete("/:myId([0-9]+)", async (req, res) => {
+  try {
+    const id = parseInt(req.params.myId);
+    const deletedWord = await database.deleteById(id);
+
+    if (!deletedWord) {
+      res.status(404).send("Can't find word");
+    } else {
+      res.status(204).send();
+    }
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+/**
+ * POST endpoint to add a new word.
+ * @function
+ * @name addNewWord
+ */
+wordsRouter.post("/", validateWordData, async (req, res) => {
+  try {
+    // Check for validation errors
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // If validation succeeds, process the request data and save it to the database
+    const { english, finnish } = req.body;
+
+    // Call the save function from your database module to save the word
+    const word = await database.save({ english, finnish });
+
+    res.status(201).json(word);
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+/**
+ * PUT endpoint to update a word by ID.
+ * @function
+ * @name updateWordById
+ */
+wordsRouter.put("/:myId([0-9]+)", validateWordData, async (req, res) => {
+  try {
+    // Check for validation errors
+    const validationErrors = validationResult(req);
+
+    if (!validationErrors.isEmpty()) {
+      return res.status(400).json({ errors: validationErrors.array() });
+    }
+
+    const id = parseInt(req.params.myId);
+    const { english, finnish } = req.body;
+
+    const word = await database.updateById(id, {
+      english,
+      finnish,
+    });
+
+    if (!word) {
+      console.log(word);
+      res.status(404).send("Can't find word");
+    } else {
+      res.status(200).json(word);
+    }
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+/**
+ * Exports the wordsRouter for use in other modules.
+ * @module
+ */
+module.exports = wordsRouter;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-crudrepository.html">crudrepository</a></li><li><a href="module-database_config.html">database/config</a></li><li><a href="module-escaped-values.html">escaped-values</a></li><li><a href="module-express.html">express</a></li><li><a href="module-routes_words.html">routes/words</a></li><li><a href="module-validation.html">validation</a></li></ul><h3>Namespaces</h3><ul><li><a href="database.html">database</a></li><li><a href="express.html">express</a></li><li><a href="module-crudrepository-config.html">config</a></li><li><a href="module-crudrepository-connectionFunctions.html">connectionFunctions</a></li><li><a href="module-escaped-values-config.html">config</a></li><li><a href="module-express-config.html">config</a></li><li><a href="module-express-express.html">express</a></li><li><a href="module-express-locationsRouter.html">locationsRouter</a></li><li><a href="module-validation-Validator.html">Validator</a></li><li><a href="mysql.html">mysql</a></li><li><a href="wordsRouter.html">wordsRouter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addNewWord">addNewWord</a></li><li><a href="global.html#config">config</a></li><li><a href="global.html#deleteWordById">deleteWordById</a></li><li><a href="global.html#getAllWords">getAllWords</a></li><li><a href="global.html#getWordById">getWordById</a></li><li><a href="global.html#requireDotenvConfig">requireDotenvConfig</a></li><li><a href="global.html#updateWordById">updateWordById</a></li><li><a href="global.html#validateWordData">validateWordData</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jan 18 2024 14:13:56 GMT+0200 (Itä-Euroopan normaaliaika)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

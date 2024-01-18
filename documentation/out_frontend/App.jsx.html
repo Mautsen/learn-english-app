@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: App.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: App.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import "./App.css";
+import TeacherView from "./TeacherView";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+
+/**
+ * Main application component for the English learning game.
+ * Handles user interaction, game logic, and rendering of the game view.
+ * @function AppView
+ * @returns {JSX.Element} - React component.
+ */
+const AppView = () => {
+  const [words, setWords] = useState([]);
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [userInput, setUserInput] = useState("");
+  const [score, setScore] = useState(0);
+  const [isGameFinished, setIsGameFinished] = useState(false);
+  const [isEnglishToFinnish, setIsEnglishtoFinnish] = useState(true);
+
+  useEffect(() => {
+    // Fetch words from an external API
+    fetch(`${import.meta.env.VITE_API_URL}/api/words`)
+      .then((response) => response.json())
+      .then((data) => setWords(shuffleArray(data)))
+      .catch((error) => console.error("Error fetching words:", error));
+  }, [isGameFinished]);
+
+  /**
+   * Shuffle an array in a random order.
+   * @function shuffleArray
+   * @param {Array} array - The array to be shuffled.
+   * @returns {Array} - Shuffled array.
+   */
+  const shuffleArray = (array) => {
+    return array.sort(() => Math.random() - 0.5);
+  };
+
+  const handleInputChange = (event) => {
+    setUserInput(event.target.value);
+  };
+
+  /**
+   * Submit the user's answer and handle the game logic.
+   * @function handleAnswerSubmit
+   * @returns {void}
+   */
+  const handleAnswerSubmit = () => {
+    if (isGameFinished) {
+      return; // Show a message when all words have been played
+    }
+
+    const isAnswerCorrect =
+      (!isEnglishToFinnish &amp;&amp;
+        userInput.toLowerCase() ===
+          words[currentWordIndex].finnish.toLowerCase()) ||
+      (isEnglishToFinnish &amp;&amp;
+        userInput.toLowerCase() ===
+          words[currentWordIndex].english.toLowerCase());
+
+    if (isAnswerCorrect) {
+      setScore((prevScore) => prevScore + 1);
+    }
+
+    setCurrentWordIndex((prevIndex) => prevIndex + 1);
+
+    if (currentWordIndex + 1 === words.length) {
+      setIsGameFinished(true);
+    }
+
+    setUserInput("");
+  };
+
+  /**
+   * Restart the game by resetting state variables.
+   * @function handleRestartGame
+   * @returns {void}
+   */
+  const handleRestartGame = () => {
+    setIsGameFinished(false);
+    setCurrentWordIndex(0);
+    setScore(0);
+    setUserInput("");
+  };
+
+  /**
+   * Toggle between English to Finnish and Finnish to English.
+   * Restart the game when changing the language.
+   * @function handleLanguageToggle
+   * @returns {void}
+   */
+  const handleLanguageToggle = () => {
+    setIsEnglishtoFinnish((prevValue) => !prevValue);
+    handleRestartGame();
+  };
+
+  if (words.length === 0) {
+    return &lt;p>Loading...&lt;/p>;
+  }
+
+  const translation = {
+    translateWord: isEnglishToFinnish
+      ? "English to Finnish"
+      : "Finnish to English",
+    translatePrompt: isEnglishToFinnish
+      ? "Käännä sana:"
+      : "Translate the word:",
+    allWordsPlayed: isEnglishToFinnish
+      ? "Kaikki sanat on pelattu!"
+      : "All words have been played!",
+    answerButton: isEnglishToFinnish ? "Vastaa" : "Answer",
+    restartButton: isEnglishToFinnish ? "Aloita alusta" : "Restart",
+    points: isEnglishToFinnish ? "Pisteet" : "Points",
+  };
+
+  return (
+    &lt;div>
+      &lt;div style={{ textAlign: "right", margin: "10px" }}>
+        &lt;Button
+          variant="outlined"
+          onClick={handleLanguageToggle}
+          style={{ backgroundColor: "white" }}
+        >
+          {translation.translateWord}
+        &lt;/Button>
+      &lt;/div>
+      &lt;Card
+        className="card"
+        variant="soft"
+        style={{
+          width: 300,
+          margin: "auto",
+          marginTop: 50,
+          borderRadius: 16,
+        }}
+      >
+        &lt;CardContent>
+          &lt;Typography variant="h4" component="div" style={{ marginBottom: 20 }}>
+            {translation.translatePrompt}
+          &lt;/Typography>
+          &lt;Typography variant="h3" component="div" style={{ marginBottom: 20 }}>
+            {isGameFinished
+              ? translation.allWordsPlayed
+              : isEnglishToFinnish
+              ? words[currentWordIndex].finnish
+              : words[currentWordIndex].english}
+          &lt;/Typography>
+          &lt;TextField
+            type="text"
+            value={userInput}
+            onChange={handleInputChange}
+            onKeyUp={(e) => e.key === "Enter" &amp;&amp; handleAnswerSubmit()}
+          />
+          {!isGameFinished ? (
+            &lt;Button
+              variant="contained"
+              onClick={handleAnswerSubmit}
+              style={{ marginTop: 20 }}
+            >
+              {translation.answerButton}
+            &lt;/Button>
+          ) : (
+            &lt;Button
+              variant="contained"
+              onClick={handleRestartGame}
+              style={{ marginTop: 20 }}
+            >
+              {translation.restartButton}
+            &lt;/Button>
+          )}
+          &lt;Typography variant="body2" component="div" style={{ marginTop: 20 }}>
+            {`${translation.points}: ${score}`}
+          &lt;/Typography>
+        &lt;/CardContent>
+      &lt;/Card>
+      &lt;Footer />
+    &lt;/div>
+  );
+};
+
+function App() {
+  return (
+    &lt;Router>
+      &lt;div>
+        &lt;Navbar />
+        &lt;Routes>
+          &lt;Route path="/teacher" element={&lt;TeacherView />} />
+          &lt;Route path="/" element={&lt;AppView />} />
+        &lt;/Routes>
+      &lt;/div>
+    &lt;/Router>
+  );
+}
+export default App;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AppView">AppView</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#RenderApp">RenderApp</a></li><li><a href="global.html#StrictMode">StrictMode</a></li><li><a href="global.html#TeacherView">TeacherView</a></li><li><a href="global.html#addWord">addWord</a></li><li><a href="global.html#deleteWord">deleteWord</a></li><li><a href="global.html#fetchWords">fetchWords</a></li><li><a href="global.html#handleAnswerSubmit">handleAnswerSubmit</a></li><li><a href="global.html#handleLanguageToggle">handleLanguageToggle</a></li><li><a href="global.html#handleRestartGame">handleRestartGame</a></li><li><a href="global.html#saveUpdatedWord">saveUpdatedWord</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#updateWord">updateWord</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jan 18 2024 14:14:57 GMT+0200 (Itä-Euroopan normaaliaika)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
