@@ -182,11 +182,21 @@ const TeacherView = () => {
               ) : (
                 <>
                   {/* Button to enter edit mode */}
-                  <button onClick={() => updateWord(word.id)}>Update</button>
+                  <button
+                    onClick={() => updateWord(word.id)}
+                    style={{ marginLeft: 15 }}
+                  >
+                    Update
+                  </button>
                 </>
               )}
               {/* Button to delete the word */}
-              <button onClick={() => deleteWord(word.id)}>Delete</button>
+              <button
+                onClick={() => deleteWord(word.id)}
+                style={{ marginLeft: 10 }}
+              >
+                Delete
+              </button>
             </li>
           ))}
         </ul>
