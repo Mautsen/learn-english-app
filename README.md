@@ -5,7 +5,7 @@ The project was created as a part of a JavaScript-course. The goal was to create
 ## Screenshots
 <img src="https://github.com/Mautsen/learn-english-app/assets/82264219/7471baa0-ff0e-4811-b429-373910b8669c" width=70% height=70%>
 <img src="https://github.com/Mautsen/learn-english-app/assets/82264219/ac3bd814-140d-42eb-aafd-0a265e6a139d" width=70% height=70%>
-<img src="https://github.com/Mautsen/learn-english-app/assets/82264219/9caad724-3da1-47c5-bf1d-87a84f084410" width=50% height=50%>
+<img src="https://github.com/Mautsen/learn-english-app/assets/82264219/1babab19-e598-4117-927a-e81f3498f263" width=50% height=50%>
 
 ## Tech used
 Frontend:
