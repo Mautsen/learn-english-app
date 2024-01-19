@@ -26,10 +26,3 @@ Content-Type: application/json
     "finnish": "koira"
 }
 
-# ###
-# patch http://localhost:8080/api/locations/1
-# Content-Type: application/json
-
-# {
-#   "latitude": 65
-# }
